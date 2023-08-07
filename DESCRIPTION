@@ -1,0 +1,27 @@
+Package: TrafficAnalysis
+Title: R package to analysis the traffic road analysis in barcelona
+Version: 0.0.0.9000
+Authors@R: 
+    person("Yohannes", "Mulaw", , role = c("aut", "cre"),
+       email= "yohannesgehan@gmail.com" )
+Description: Analaysis the road traffic accident in barcelona in 2017.
+License: CC0
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Depends: 
+    R (>= 2.10),
+    tidyverse
+LazyData: true
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Imports: 
+    gganimate,
+    ggspatial,
+    ggtext,
+    gifski,
+    leaflet,
+    sf,
+    sfhotspot
