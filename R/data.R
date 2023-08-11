@@ -2,7 +2,7 @@
 #'
 #' A data set containing road traffic accidents.
 #'
-#' @format A data frame with 10335 rows and 8 variables:
+#' @format A data frame with 10330 rows and 8 variables:
 #' \describe{
 #'   \item{Id}{id that uniquely identifies the accident.}
 #'   \item{Street}{The street where the accident occurred.}

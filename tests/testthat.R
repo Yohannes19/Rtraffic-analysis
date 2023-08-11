@@ -9,4 +9,5 @@
 library(testthat)
 library(TrafficAnalysis)
 
+
 test_check("TrafficAnalysis")

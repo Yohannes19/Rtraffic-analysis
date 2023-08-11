@@ -1,5 +1,5 @@
 Package: TrafficAnalysis
-Title: R package to analysis the traffic road analysis in barcelona
+Title: R package to analysis the traffic accidents data in Barcelona 2017
 Version: 0.0.0.9000
 Authors@R: 
     person("Yohannes", "Mulaw", , role = c("aut", "cre"),
@@ -19,6 +19,7 @@ Suggests:
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Imports: 
+    assertive,
     gganimate,
     ggspatial,
     ggtext,

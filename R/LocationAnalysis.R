@@ -23,6 +23,8 @@ Display_allaccidentdata <-function(accidents_data){
 #' @export
 Display_Serious_injuries<-function(accidents_data){
   df_serious_injuries <- accidents_data[accidents_data$Serious.injuries > 0, ]
+  print(paste("Number of Serious Accidents:", nrow(df_serious_injuries)))  # Debugging line
+
   barcelona_map <- leaflet(data = df_serious_injuries) %>%
     setView(lng = 2.15899, lat = 41.38879, zoom = 11) %>%
     addTiles()
@@ -76,7 +78,6 @@ Display_AnimatedHeatMap <- function(data_sf) {
 
   # Loop through 24 times
   for (i in 0:23) {
-    # Define the filter criteria
     filter_criteria <- i
     hour_sf <- filter(data_sf,as.numeric(format(datetime,"%H")) == filter_criteria)
     hour_sf$datetime <- ymd_hms(sprintf("2017-01-01 %02d:00:00",i))
@@ -113,6 +114,9 @@ Display_AnimatedHeatMap <- function(data_sf) {
 #' @return A leaflet map showing markers for areas with high vehicle involvement in accidents
 #' @export
 perform_high_vehicleinvolvedareas <- function(accidents_data, vehicles_threshold) {
+  assertive::assert_all_are_less_than_or_equal_to(vehicles_threshold, y = 14)
+
+
   # Aggregate data to get counts of accidents with the most vehicles involved at each location
   high_vehicles_aggregated <- accidents_data %>%
     filter(Vehicles.involved >= vehicles_threshold) %>%

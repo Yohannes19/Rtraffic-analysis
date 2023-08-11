@@ -1,20 +1,23 @@
 ---
-title: "Traffic Accident Data Analysis"
+title: "Traffic Accident Data Analysis for Barcelona in 2017"
 author: Yohannes Abrha Mulaw
-output: rmarkdown::html_vignette
-date: "07/08/2023"
+date: "13/08/2023"
+output: 
+   rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Traffic Accident Data Analysis}
   
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
+##### github: https://github.com/Yohannes19/Rtraffic-analysis
+#####  email: ymulaw@uni-muenster.de
+##### ID: 542515
 
 ```{r, include = FALSE,options(warn=0)}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  fig.width=10, fig.height=7,fig.align="center",
+  fig.align='center',fig.width=8, fig.height=5,
   comment = "#>"
 )
 
@@ -51,7 +54,6 @@ library(tidyverse)
 library(gganimate)
 library(gifski)
 library(ggtext)
-library(mapview)
 ```
 
 ## Dataset Overview
@@ -194,7 +196,7 @@ This Function provides a visual representation of areas where car accidents with
 
 ```{r perform_highvehicle_chunk, results='asis'}
 
-perform_high_vehicleinvolvedareas(accidents2017,10)
+perform_high_vehicleinvolvedareas(accidents2017,14)
 
 ```
 

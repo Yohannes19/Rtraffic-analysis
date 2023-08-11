@@ -5,7 +5,7 @@
 \alias{accidents2017}
 \title{Road Traffic Accident Analysis for Barcelona, 2017.}
 \format{
-A data frame with 10335 rows and 8 variables:
+A data frame with 10330 rows and 8 variables:
 \describe{
 \item{Id}{id that uniquely identifies the accident.}
 \item{Street}{The street where the accident occurred.}
