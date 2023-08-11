@@ -1,31 +1,3 @@
-library(sfhotspot)
-library(sf)
-
-#' Perform Road Traffic Accidents Analysis
-#'
-#' This function performs various analyses on the road traffic accidents dataset.
-#'
-#' @param accidents A data frame containing the road traffic accidents dataset.
-#' @return A list of analysis results.
-#' @export
-perform_count_accidents <- function(accidents) {
-  # Add your analysis code here
-  # Compute total number of accidents
-  total_accidents <- nrow(accidents)
- #summary_stats <- summary(accidents[c("Mild.injuries", "Serious.injuries", "Victims", "Vehicles.involved")])
-
-sum
- avg_injuries <- mean(accidents$Mild.injuries + accidents$Serious.injuries)
-
-
-
-#print(total_accidents)
-  analysis_results <- list(
-    total_accidents,avg_injuries,accidents_by_month,accidents_by_weekday
-
-  )
-  return(analysis_results)
-}
 
 #' Calculate summary statistics for car accident data
 #'
@@ -40,10 +12,14 @@ sum
   max_victims <- max(data$Victims)
   max_vehicles_involved <- max(data$Vehicles.involved)
   min_vehicles_involved <- min(data$Vehicles.involved)
-  Total_Victmis <-sum(data$Victims)
+  total_victims <-sum(data$Victims)
   sum_serious_injuries<-sum(data$Serious.injuries)
   sum_mild_injuries<-sum(data$Mild.injuries)
-  avg_injuries <- mean(data$Mild.injuries + data$Serious.injuries)
+  avg_victims_per_accident <- total_victims / total_accidents
+  prop_mild_injuries <- sum_mild_injuries / total_victims
+  prop_serious_injuries <- sum_serious_injuries / total_victims
+  avg_vehicles_per_accident <- mean(data$Vehicles.involved)
+
 
   summary_stats <- list(
     TotalAccidents = total_accidents,
@@ -53,7 +29,11 @@ sum
     maxVictims = max_victims,
     MaxVehiclesInvolved = max_vehicles_involved,
     MinVehiclesInvolved = min_vehicles_involved,
-    AverageInjuries=avg_injuries
+    TotalVictims = total_victims,
+    AvgVictimsPerAccident = avg_victims_per_accident,
+    PropMildInjuries = prop_mild_injuries,
+    PropSeriousInjuries = prop_serious_injuries,
+    AvgVehiclesPerAccident = avg_vehicles_per_accident
   )
   return(summary_stats)
   }
@@ -82,7 +62,7 @@ sum
     month_names <- month.name[1:12]
     accidents_month$month <- factor(month_names[accidents_month$month],levels = month_names)
 
-  print(accidents_month)
+ # print(accidents_month)
   p <- ggplot(accidents_month, aes(month,num_accidents)) +
     geom_bar(stat = "identity", fill = "blue", alpha = 0.5,position="identity") +
     labs(title = "Accidents in Barcelona in 2017",
@@ -104,7 +84,7 @@ sum
   #' This function performs time analysis on the car accident data, allowing you to analyze the accidents
   #' based on different time dimensions.
   #'
-  #' @param data A data frame containing the car accident data
+  #' @param accidents_data A data frame containing the car accident data
   #' @return A data frame summarizing the accidents based on the chosen time dimension
   #' @export
   perform_weekdays_analysis <- function(accidents_data) {
@@ -124,46 +104,13 @@ sum
     # Replace the day integers by day names
     day_names <- c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
     accidents_day$day_of_week <- factor(accidents_day$day_of_week, levels = day_names)
-    print(accidents_day)
+    return(accidents_day)
 
 
   }
-  #' Perform type of accident analysis with vichles involed in the accident
-  #'
-  #' This function performs time analysis on the car accident data, allowing you to analyze the accidents
-  #' based on different time dimensions.
-  #'
-  #' @param data A data frame containing the car accident data
-  #' @return A data frame summarizing the accidents based on the chosen time dimension
-  #' @export
-  perform_vehicledInvolved <-function(accidents_data){
 
-    vehicles_involved <- accidents_data %>%
-      group_by(Vehicles.involved) %>%
-      summarize(num_accidents = n())
 
-    # Include 0 for the number of vehicles involved with no accidents for better visualization
-    vehicles_involved <- rbind(vehicles_involved, data.frame(Vehicles.involved = 0, num_accidents = 0))
 
-    # Sort the data frame by the 'Vehicles.involved' column
-    vehicles_involved <- vehicles_involved[order(vehicles_involved$Vehicles.involved), ]
-
-    # Create the bar plot of number of car accidents according to the number of vehicles involved
-    p <- ggplot(vehicles_involved, aes(x = as.factor(Vehicles.involved), y = num_accidents)) +
-      geom_bar(stat = "identity", fill = "darkblue", alpha = 0.5) +
-      geom_text(aes(label = num_accidents), vjust = -0.5, size = 4) +
-      labs(title = "Accidents in Barcelona in 2017",
-           x = "Vehicles involved",
-           y = "Number of accidents") +
-      theme_minimal() +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-    # Set the figure size
-    options(repr.plot.width = 12, repr.plot.height = 7)
-
-    # Print the plot
-    print(p)
-  }
 
 
   #' Perform time analysis on car accident data in the weekdays
@@ -171,7 +118,7 @@ sum
   #' This function performs time analysis on the car accident data, allowing you to analyze the accidents
   #' based on different time dimensions.
   #'
-  #' @param data A data frame containing the car accident data
+  #' @param accidents_data A data frame containing the car accident data
   #' @return A data frame summarizing the accidents based on the chosen time dimension
   #' @export
   perform_eachday_year<-function(accidents_data){
@@ -182,18 +129,17 @@ sum
       group_by(date = as.Date(datetime)) %>%
       summarize(num_accidents = n())
 
-   print(accidents)
-
+  # print(accidents)
+return(accidents)
 
   }
 
-  #' Perform accident type analysis and percenatge
+  #' Perform accident type analysis for comparing the mid and serious injuries
   #'
-  #' This function performs accident type analysis on the car accident data
+  #' This function performs accident type analysis on the car accident data and visualizes the percentage of mild and serious injuries using a pie chart.
   #'
-  #'
-  #' @param data A data frame containing the car accident data
-  #' @return A data frame summarizing the accidents based on the chosen time dimension
+  #' @param accidents_data A data frame containing the car accident data
+  #' @return A pie chart visualizing the percentage of mild and serious injuries
   #' @export
   perform_percentage_for_mid_serious<-function(accidents_data){
     # Compute the sum of mild injuries and serious injuries
@@ -226,54 +172,8 @@ sum
 
 }
 
-  #' Perform the rate of the accident by the day of the week
-  #'
-  #' This function performs comparison of the rate of accidents between serious and mid injuries
-  #'
-  #'
-  #' @param data A data frame containing the car accident data
-  #' @return A data frame summarizing the accidents based on the chosen time dimension
-  #' @export
-perform_rateofinjury_bydayofweek<-function(accidents_data){
-  accidents_data$datetime <- ymd_hms(accidents_data$datetime)
 
-  # Extract the day of the week from the 'datetime' column
-  accidents_data$day_of_week <- weekdays(accidents_data$datetime)
 
-  # Filter the data for serious injuries and calculate the percentage per day of the week
-  accidents_serious <- accidents_data %>%
-    filter(`Serious.injuries` != 0) %>%
-    group_by(day_of_week) %>%
-    summarise(rate_serious = sum(`Serious.injuries`) / sum(accidents_data$`Serious.injuries`))
-
-  # Filter the data for mild injuries and calculate the percentage per day of the week
-  accidents_mild <- accidents_data %>%
-    filter(`Mild.injuries` != 0) %>%
-    group_by(day_of_week) %>%
-    summarise(rate_mild = sum(`Mild.injuries`) / sum(accidents_data$`Mild.injuries`))
-
-  # Combine both data frames
-  rates <- full_join(accidents_serious, accidents_mild, by = "day_of_week")
-
-  # Set the order of days of the week
-  rates$day_of_week <- factor(rates$day_of_week, levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
-
-  # Create the side-by-side bar plot
-  p <- ggplot(rates, aes(x = day_of_week)) +
-    geom_bar(aes(y = rate_serious), stat = "identity", position = "dodge", fill = "red", alpha = 0.5) +
-    geom_bar(aes(y = rate_mild), stat = "identity", position = "dodge", fill = "green", alpha = 0.5) +
-    labs(title = "Rate of injuries type by day of the week",
-         x = "Day of the week",
-         y = "Percentage") +
-    theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-  # Set the figure size
-  options(repr.plot.width = 12, repr.plot.height = 7)
-
-  # Print the plot
-  print(p)
-}
 
 
 

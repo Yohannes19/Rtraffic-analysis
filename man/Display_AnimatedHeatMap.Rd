@@ -7,7 +7,7 @@
 Display_AnimatedHeatMap(data_sf)
 }
 \arguments{
-\item{data}{A data frame containing the car accident data}
+\item{data_sf}{A data frame containing the car accident data}
 }
 \value{
 A map that shows the changes of the accident intensities for 24 hours

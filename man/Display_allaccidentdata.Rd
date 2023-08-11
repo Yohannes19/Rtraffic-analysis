@@ -2,13 +2,16 @@
 % Please edit documentation in R/LocationAnalysis.R
 \name{Display_allaccidentdata}
 \alias{Display_allaccidentdata}
-\title{Displays all the acccidents data}
+\title{Displays all the accidents data}
 \usage{
 Display_allaccidentdata(accidents_data)
+}
+\arguments{
+\item{accidents_data}{A data frame containing the car accident data}
 }
 \value{
 All the acccidents data on top of osm
 }
 \description{
-This function displays all the accdeints data  with the help of mapview
+This function displays all the accidents data  with the help of mapview
 }

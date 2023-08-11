@@ -5,7 +5,7 @@
 #' @param data A data frame containing the car accident data
 #' @return Accidents data with calculated density
 #' @export
-Perform_hotspotsf <-function(data){
+Perform_hotspot_gistar <-function(data){
   accidentsdata1 <- sf::st_transform(data,32615)
   accidents<-sfhotspot::hotspot_gistar(accidentsdata1)
   return(accidents)

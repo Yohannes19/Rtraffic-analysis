@@ -1,23 +1,17 @@
-#' Displays the study area for this project
+library(sf)
+library(leaflet)
+#' Displays all the accidents data
 #'
-#' This function displays the study area for this data analysis in this case Barcelona.Spain
-#'
-#' @return Leaflet map with zoom 12 of the study area,barcelona
-#' @export
-Display_study_area<-function(){
-  barcelona_data <- data.frame(lat = c(41.38879), lon = c(2.15899))
-  barcelona_sf <- st_as_sf(barcelona_data, coords = c("lon", "lat"), crs = 4326)
-  barcelona_map <- mapview(barcelona_sf, map.types = "OpenStreetMap", col.regions = "blue",zoom=12, legend = FALSE)
-  barcelona_map
-}
-#' Displays all the acccidents data
-#'
-#' This function displays all the accdeints data  with the help of mapview
-#'
+#' This function displays all the accidents data  with the help of mapview
+#' @param accidents_data A data frame containing the car accident data
 #' @return All the acccidents data on top of osm
 #' @export
 Display_allaccidentdata <-function(accidents_data){
-  mapview(accidents_data)
+  ggplot(accidents2017) +
+    ggspatial::annotation_map_tile(type = "cartolight", zoomin = 0, quiet = TRUE) +
+
+    geom_sf(alpha = 0.1,size=2) +
+    theme_minimal()
 
 }
 #' Displays the serious injuries occurred in the area
@@ -65,12 +59,14 @@ extract_lon_lat <- function(geometry_column) {
   data.frame(lon = coords[, 1], lat = coords[, 2])
 }
 
+
+
 #' Animated Heatmap for the accidents data for 24 hours
 #'
 #' This function displays the animated heatmap for each hours in 24 hours.
 #'
 #' @import gifski
-#' @param data A data frame containing the car accident data
+#' @param data_sf A data frame containing the car accident data
 #' @return A map that shows the changes of the accident intensities for 24 hours
 #' @export
 Display_AnimatedHeatMap <- function(data_sf) {
@@ -100,16 +96,39 @@ Display_AnimatedHeatMap <- function(data_sf) {
      labs(x = "longitude", y = "latitude") +
      theme(legend.text = element_text(size = 16), plot.title = element_markdown()) +
      transition_states(datetime, transition_length=2,state_length=5) +
-     ggtitle("accidents data per hour : {closest_state}")
+     ggtitle("Accidents data per hour : {closest_state}")
 
   # animate the heatmap using gganimate
     animated_heatmap <- animate(heatmap_plot,duration=20,nframes=100,renderer = gifski_renderer())
     #return(animated_heatmap)
-
-
   }
 
+#' Visualize Areas with High Vehicle Involvement in Car Accidents
+#'
+#' This function creates a leaflet map to visualize areas where car accidents with a high number of vehicles involved have occurred.
+#'
+#'
+#' @param accidents_data An sf data frame containing car accident data
+#' @param vehicles_threshold Minimum number of vehicles involved to consider for visualization
+#' @return A leaflet map showing markers for areas with high vehicle involvement in accidents
+#' @export
+perform_high_vehicleinvolvedareas <- function(accidents_data, vehicles_threshold) {
+  # Aggregate data to get counts of accidents with the most vehicles involved at each location
+  high_vehicles_aggregated <- accidents_data %>%
+    filter(Vehicles.involved >= vehicles_threshold) %>%
+    group_by(geometry) %>%
+    summarise(num_accidents = n())
+  # Create the map
+  vehicle_map <- leaflet(high_vehicles_aggregated) %>%
+    addTiles() %>%
+    addMarkers(
+      clusterOptions = markerClusterOptions(),
+      popup = ~paste("Number of Accidents:", num_accidents)
+    )
 
+  # Display the map
+  vehicle_map
+}
 
 
 
